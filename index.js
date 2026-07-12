@@ -7,6 +7,9 @@ const {
 } = require("discord.js");
 
 const commandHandler = require("./handlers/commandHandler");
+const interactionCreate = require("./events/interactionCreate");
+const readyEvent = require("./events/ready");
+const messageCreate = require("./events/messageCreate");
 
 const client = new Client({
     intents: [
@@ -22,24 +25,16 @@ const client = new Client({
 
 commandHandler(client);
 
-const readyEvent = require("./events/ready");
-
 client.once("ready", async () => {
-
     readyEvent(client);
-
 });
 
 client.on("interactionCreate", async (interaction) => {
-
-    if (!interaction.isChatInputCommand()) return;
-
+    interactionCreate(interaction, client);
 });
 
 client.on("messageCreate", async (message) => {
-
-    if (message.author.bot) return;
-
+    messageCreate(message, client);
 });
 
 client.login(process.env.TOKEN);
