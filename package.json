@@ -1,0 +1,29 @@
+{
+  "name": "bot-de-mediadores",
+  "version": "1.0.0",
+  "description": "Bot de Mediação para Discord dono @yagox⁷",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "mediacao",
+    "pix",
+    "x1",
+    "ap"
+  ],
+  "author": "Yago",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "better-sqlite3": "^11.7.0",
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7",
+    "qrcode": "^1.5.4",
+    "uuid": "^11.0.5"
+  }
+}
