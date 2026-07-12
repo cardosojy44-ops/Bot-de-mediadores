@@ -22,23 +22,12 @@ const client = new Client({
 
 commandHandler(client);
 
-client.once("ready", () => {
-    console.log("================================");
-    console.log(" BOT DE MEDIAÇÃO ONLINE ");
-    console.log("================================");
-    console.log(`Logado como: ${client.user.tag}`);
-    console.log(`Servidores: ${client.guilds.cache.size}`);
-    console.log("================================");
+const readyEvent = require("./events/ready");
 
-    client.user.setPresence({
-        activities: [
-            {
-                name: "Gerenciando filas",
-                type: 3
-            }
-        ],
-        status: "online"
-    });
+client.once("ready", async () => {
+
+    readyEvent(client);
+
 });
 
 client.on("interactionCreate", async (interaction) => {
