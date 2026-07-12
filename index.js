@@ -6,6 +6,8 @@ const {
     Partials
 } = require("discord.js");
 
+const commandHandler = require("./handlers/commandHandler");
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -17,6 +19,8 @@ const client = new Client({
         Partials.Channel
     ]
 });
+
+commandHandler(client);
 
 client.once("ready", () => {
     console.log("================================");
