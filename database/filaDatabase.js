@@ -2,28 +2,34 @@ const Database = require("better-sqlite3");
 
 const db = new Database("./database/filas.db");
 
-db.prepare(`
+db.exec(`
+
 CREATE TABLE IF NOT EXISTS filas (
 
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-guild TEXT,
+guild TEXT NOT NULL,
 
-canal TEXT,
+canal TEXT NOT NULL,
 
-mensagem TEXT,
+mensagem TEXT NOT NULL,
 
-valor TEXT,
+valor TEXT NOT NULL,
 
-modo TEXT,
+modo TEXT DEFAULT '1x1 Mobile',
 
-jogador1 TEXT,
+status TEXT DEFAULT 'aberta',
 
-jogador2 TEXT,
+gelo_infinito_1 TEXT,
+gelo_infinito_2 TEXT,
 
-status TEXT
+gelo_normal_1 TEXT,
+gelo_normal_2 TEXT,
 
-)
-`).run();
+criada_em DATETIME DEFAULT CURRENT_TIMESTAMP
+
+);
+
+`);
 
 module.exports = db;
