@@ -1,132 +1,152 @@
 const {
-    EmbedBuilder,
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
-    PermissionFlagsBits
+EmbedBuilder,
+ActionRowBuilder,
+ButtonBuilder,
+ButtonStyle
 } = require("discord.js");
 
 const filaDB = require("../../database/filaDatabase");
 
 module.exports = {
 
-    name: "criarfila",
+name: "criarfila",
 
-    async execute(message, args) {
+async execute(message, args){
 
-        if (!message.member.permissions.has(PermissionFlagsBits.Administrator)) {
+if(!message.member.permissions.has("Administrator"))
+return message.reply("❌ Apenas administradores.");
 
-            return message.reply("❌ Apenas administradores podem criar filas.");
+const preco = args[0];
 
-        }
+if(!preco)
+return message.reply(".criarfila <valor>");
 
-        const valor = args[0];
+const embed = new EmbedBuilder()
 
-        const modo = args.slice(1).join(" ");
+.setColor("#5865F2")
 
-        if (!valor || !modo) {
+.setTitle("1x1 | Fila")
 
-            return message.reply(
-                "Use:\n.criarfila 5 Mobile\n\nExemplo:\n.criarfila 10 Emulador"
-            );
+.setDescription(
+`» **Formato:** \`1x1 Mobile\`
 
-        }
+💰 **Preço:** \`R$ ${preco},00\`
 
-        const embed = new EmbedBuilder()
+👑 **Jogadores**
 
-            .setColor("#2F3136")
+🧊 **Gelo Infinito**
 
-            .setTitle("🎮 FILA DE X1")
+1.
 
-            .setDescription(
-`💰 **Valor:** R$ ${valor}
+2.
 
-🎮 **Modo:** ${modo}
+────────────
 
-👤 Jogador 1:
-Aguardando...
+🧊 **Gelo Normal**
 
-👤 Jogador 2:
-Aguardando...
+1.
 
-📊 Status:
-🟢 Aguardando jogadores.`
-            )
+2.`
+)
 
-            .setFooter({
+.setThumbnail(message.guild.iconURL())
 
-                text: "Bot de Mediação"
+.setFooter({
 
-            });
+text:"Aguardando jogadores..."
 
-        const botoes = new ActionRowBuilder()
+});
 
-            .addComponents(
+const row = new ActionRowBuilder()
 
-                new ButtonBuilder()
+.addComponents(
 
-                    .setCustomId("entrar_fila")
+new ButtonBuilder()
 
-                    .setLabel("Entrar")
+.setCustomId("gelo_infinito")
 
-                    .setEmoji("✅")
+.setLabel("Gelo infinito")
 
-                    .setStyle(ButtonStyle.Success),
+.setEmoji("🧊")
 
-                new ButtonBuilder()
+.setStyle(ButtonStyle.Success),
 
-                    .setCustomId("sair_fila")
+new ButtonBuilder()
 
-                    .setLabel("Sair")
+.setCustomId("gelo_normal")
 
-                    .setEmoji("❌")
+.setLabel("Gelo normal")
 
-                    .setStyle(ButtonStyle.Danger)
+.setEmoji("🧊")
 
-            );
+.setStyle(ButtonStyle.Success),
 
-        const msg = await message.channel.send({
+new ButtonBuilder()
 
-            embeds: [embed],
+.setCustomId("sair_fila")
 
-            components: [botoes]
+.setLabel("Sair")
 
-        });
+.setEmoji("↩️")
 
-        filaDB.prepare(`
-            INSERT INTO filas(
-                guild,
-                canal,
-                mensagem,
-                valor,
-                modo,
-                jogador1,
-                jogador2,
-                status
-            )
-            VALUES(?,?,?,?,?,?,?,?)
-        `).run(
+.setStyle(ButtonStyle.Danger)
 
-            message.guild.id,
+);
 
-            message.channel.id,
+const painel = await message.channel.send({
 
-            msg.id,
+embeds:[embed],
 
-            valor,
+components:[row]
 
-            modo,
+});
 
-            "",
+filaDB.prepare(`
 
-            "",
+INSERT INTO filas(
 
-            "aguardando"
+guild,
 
-        );
+canal,
 
-        message.reply("✅ Fila criada com sucesso.");
+mensagem,
 
-    }
+valor,
+
+gelo_infinito_1,
+
+gelo_infinito_2,
+
+gelo_normal_1,
+
+gelo_normal_2
+
+)
+
+VALUES(?,?,?,?,?,?,?,?)
+
+`).run(
+
+message.guild.id,
+
+message.channel.id,
+
+painel.id,
+
+preco,
+
+null,
+
+null,
+
+null,
+
+null
+
+);
+
+message.reply("✅ Painel criado.");
+
+}
 
 };
